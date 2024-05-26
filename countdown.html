@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduation Countdown Timer with Alarms and Sound</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #01204E;
+            color:#FEAE6F;
+            font-family: 'Arial', sans-serif;
+            font-size: 5vw;
+        }
+        #timer {
+            text-align: center;
+        }
+        #icon {
+            font-size: 15vw; /* Increase the size of the icon */
+            margin-bottom: 20px; /* Increase the margin to give more space */
+        }
+    </style>
+</head>
+<body>
+    <div id="icon">🎓</div>
+    <div id="timer">Countdown to Your Graduation</div>
+    <audio id="alarmSound">
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+    <script>
+        // Set the target date
+        const targetDate = new Date('2024-07-07').getTime();
+
+        // Define alarm dates
+        const alarmDates = [
+            new Date('2024-06-08').getTime(),
+            new Date('2024-06-21').getTime(),
+            // Add the graduation date
+            new Date('2024-06-29').getTime() // Change this to your graduation date
+        ];
+
+        // Function to update countdown and check for alarms
+        function updateCountdown() {
+            // Get current date and time
+            const now = new Date().getTime();
+            
+            // Calculate the distance between now and the target date
+            const distance = targetDate - now;
+            
+            // Calculate days, hours, minutes, and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the countdown
+            document.getElementById("timer").innerHTML = `Graduation: ${days} d ${hours} h ${minutes} min ${seconds} sec`;
+
+            // Check for alarms
+            const currentDateTime = new Date().getTime();
+            for (let i = 0; i < alarmDates.length; i++) {
+                if (currentDateTime >= alarmDates[i]) {
+                    const alarmDate = new Date(alarmDates[i]);
+                    if (alarmDate.getTime() === new Date('2024-06-29').getTime()) {
+                        alert('Congratulations on your graduation! 🎓🎉');
+                    } else {
+                        alert(`Alarm! Today is ${alarmDate.toDateString()}`);
+                    }
+                    // Play the alarm sound
+                    const alarmSound = document.getElementById("alarmSound");
+                    alarmSound.play();
+                    // Remove the alarm date to prevent repeated alerts
+                    alarmDates.splice(i, 1);
+                }
+            }
+
+            // Update the countdown every second
+            setTimeout(updateCountdown, 1000);
+        }
+
+        // Call the function to start the countdown
+        updateCountdown();
+    </script>
+</body>
+</html>
